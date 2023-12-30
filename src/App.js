@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router,Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+import Home from '../src/pages/Home';
+import CreateRoom from '../src/pages/CreateRoom';
+import JoinRoom from '../src/pages/JoinRoom';
+import Chat from './pages/Chat';
 
 function App() {
+  const [createdRoom, setCreatedRoom] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [onLeaveChat, setOnleaveChat] = useState(null);
+
+  const handleCreateRoom = (roomName,roomCode) => {
+    setCreatedRoom(roomCode,roomName);
+    setCurrentUser(currentUser);
+    onLeaveChat(onLeaveChat);
+  };
+
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router className="container mx-auto bg-green-700 h-screen p-4 flex flex-col">
+      <Routes>
+        <Route path='/' element={<Home />}/>
+        <Route path='/CreateRoom' element={<CreateRoom onCreate={handleCreateRoom} />} />
+        <Route path='/JoinRoom' element={<JoinRoom />}/>
+        <Route path='/Chat/' element={<Chat CreateRoom={createdRoom} currentUser={currentUser} onLeaveChat={onLeaveChat}/>} />
+      </Routes>
+    </Router> 
   );
 }
 
