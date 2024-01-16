@@ -4,11 +4,12 @@ import Home from '../src/pages/Home';
 import CreateRoom from '../src/pages/CreateRoom';
 import JoinRoom from '../src/pages/JoinRoom';
 import Chat from './pages/Chat';
+import RoomsList from './pages/RoomList';
 
 function App() {
   const [createdRoom, setCreatedRoom] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [onLeaveChat, setOnleaveChat] = useState(null);
+  const [onLeaveChat] = useState(null);
 
   const handleCreateRoom = (roomName,roomCode) => {
     setCreatedRoom(roomCode,roomName);
@@ -25,6 +26,7 @@ function App() {
         <Route path='/CreateRoom' element={<CreateRoom onCreate={handleCreateRoom} />} />
         <Route path='/JoinRoom' element={<JoinRoom />}/>
         <Route path='/Chat/' element={<Chat CreateRoom={createdRoom} currentUser={currentUser} onLeaveChat={onLeaveChat}/>} />
+        <Route path='/RoomList' element={<RoomsList />}></Route>
       </Routes>
     </Router> 
   );

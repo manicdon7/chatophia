@@ -1,5 +1,6 @@
+// JoinRoom.js
 import React, { useState } from 'react';
-import img from '../assets/social-networks-dating-apps-vector-seamless-pattern_341076-469.avif';
+import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, child, get } from 'firebase/database';
 
 const JoinRoom = ({ history }) => {
@@ -8,15 +9,51 @@ const JoinRoom = ({ history }) => {
   const [username, setUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const firebaseConfig = {
+    // Your Firebase config here
+    apiKey: "AIzaSyDpXmrI2zGhrgz5MDYpVoYq2-Qgt5ylVHo",
+      authDomain: "chatophia-69424.firebaseapp.com",
+      projectId: "chatophia-69424",
+      storageBucket: "chatophia-69424.appspot.com",
+      messagingSenderId: "315517249939",
+      appId: "1:315517249939:web:4f637b25191f0c9b83a066",
+      databaseURL: "https://chatophia-69424-default-rtdb.firebaseio.com/",
+  };
+
+  const initializeFirebase = () => {
+    initializeApp(firebaseConfig);
+  };
+
+  const checkRoomExists = async ({ roomName, roomCode }) => {
+    try {
+      initializeFirebase();
+      const db = getDatabase();
+      const roomsRef = ref(db, 'create-room');
+
+      const snapshot = await get(child(roomsRef, roomCode));
+
+      if (snapshot.exists() && snapshot.val().roomName === roomName) {
+        return snapshot.val();
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error('Error in Firebase request:', error);
+      throw new Error('An error occurred during the Firebase request');
+    }
+  };
+
   const handleJoin = async () => {
     if (roomName.trim() !== '' && roomCode.trim() !== '' && username.trim() !== '') {
       try {
-        const roomExists = await checkRoomExists({ roomName, roomCode });
+        const roomData = await checkRoomExists({ roomName, roomCode });
 
-        if (roomExists) {
-          console.log('Redirecting to chat room...');
-          // Navigate to the chat room using React Router or your preferred navigation method
-          history.push(`/create-room/messages${roomCode}`);
+        if (roomData) {
+          // Redirect to the chat room with room name and code
+          history.push({
+            pathname: `/create-room/${roomData.roomName}/${roomData.roomCode}`,
+            state: { roomData, username },
+          });
         } else {
           setErrorMessage('Invalid room name or room code. Please check your credentials.');
         }
@@ -27,21 +64,8 @@ const JoinRoom = ({ history }) => {
     }
   };
 
-  const checkRoomExists = async ({ roomName, roomCode }) => {
-    try {
-      const db = getDatabase();
-      const roomsRef = ref(db, 'messages');
-
-      const snapshot = await get(child(roomsRef, roomCode));
-      return snapshot.exists();
-    } catch (error) {
-      console.error('Error in Firebase request:', error);
-      throw new Error('An error occurred during the Firebase request');
-    }
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl h-screen p-5" style={{backgroundImage:`url(${img})`}}>
+    <div className="flex flex-col items-center justify-center rounded-xl h-screen p-5">
       <div className="text-center underline mt-10 text-black font-bold text-4xl">Join Room</div>
       <div className="p-4 bg-white rounded shadow mt-8">
         <div className="mb-4">

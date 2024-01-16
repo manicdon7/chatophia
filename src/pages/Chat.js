@@ -4,7 +4,7 @@ import img from '../assets/social-networks-dating-apps-vector-seamless-pattern_3
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, push, onValue, child, get } from 'firebase/database';
 
-const socket = io('http://localhost:3001');
+const socket = io('http://localhost:3000');
 
 const Chat = ({ onLeaveChat, currentUser }) => {
   const [messages, setMessages] = useState([]);
@@ -25,6 +25,7 @@ const Chat = ({ onLeaveChat, currentUser }) => {
     initializeApp(firebaseConfig);
   };
   
+
   const sendMessage = async () => {
     try {
       console.log('Entering sendMessage function...');
@@ -38,8 +39,9 @@ const Chat = ({ onLeaveChat, currentUser }) => {
         const payload = {
           content: newMessage,
           sender: currentUser, // Assuming displayName is available in currentUser
-          timestamp: new Date().toISOString(), // Add a timestamp to the message
+          timestamp: new Date().toISOString(),
         };
+        
 
         console.log('Message payload:', payload);
 
@@ -79,7 +81,7 @@ const Chat = ({ onLeaveChat, currentUser }) => {
     if (createdRoom && createdRoom.roomCode) {
       // Reference to Firebase Realtime Database
       const db = getDatabase();
-      const messagesRef = ref(db, `create-room/messages/${createdRoom.roomCode}`);
+      const messagesRef = ref(db, `create-room/${createdRoom.roomCode}/messages`);
 
       // Fetch existing messages
       const snapshot = await get(child(messagesRef));
@@ -184,7 +186,7 @@ const Chat = ({ onLeaveChat, currentUser }) => {
             className="border p-2 w-full rounded-lg"
             value={newMessage}
             onChange={(e) => {
-              console.log('Input value:', e.target.value);
+              // console.log('Input value:', e.target.value);
               setNewMessage(e.target.value);
             }}
             placeholder="Type your message..."

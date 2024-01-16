@@ -60,7 +60,7 @@ const CreateRoom = () => {
   return (
     <div className="flex flex-col items-center justify-center rounded-xl h-screen p-5" style={{ backgroundImage: `url(${img})` }}>
       <div className="text-center underline mt-10 text-black font-bold text-4xl">Create Room</div>
-      <div className="p-4 bg-white rounded shadow-lg mt-8">
+      <div className="p-4 bg-purple-400 rounded shadow-lg mt-8">
         <div className="mb-4">
           <label htmlFor="roomName" className="text-lg font-semibold">
             Room Name:
