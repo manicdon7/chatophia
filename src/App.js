@@ -18,7 +18,6 @@ function App() {
   };
 
   
-
   return (
     <Router className="container mx-auto bg-green-700 h-screen p-4 flex flex-col">
       <Routes>
